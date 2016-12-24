@@ -28,13 +28,13 @@ inquirer.prompt(
     {
       type: 'input',
       name: 'outbound',
-      message: 'What date are you leaving?',
+      message: 'What date are you leaving? (YYYY-MM-DD)',
       default: 'anytime'
     },
     {
       type: 'input',
       name: 'inbound',
-      message: 'What date are you returning?',
+      message: 'What date are you returning? (YYYY-MM-DD)',
       default: 'anytime'
     }
   ]
