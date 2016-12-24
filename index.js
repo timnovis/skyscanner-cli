@@ -3,9 +3,9 @@
 console.log('Search for flight prices from your terminal!');
 
 require('dotenv').config();
-var request = require('request'),
-inquirer = require('inquirer'),
-config = {
+var request = require('request');
+var inquirer = require('inquirer');
+var defaults = {
   country: "UK",
   currency: "GBP",
   locale: "en-GB"
@@ -13,6 +13,12 @@ config = {
 
 inquirer.prompt(
   [
+    {
+      type: 'input',
+      name: 'currency',
+      message: 'Which currency should we use?',
+      default: defaults.currency
+    },
     {
       type: 'input',
       name: 'origin',
@@ -45,17 +51,18 @@ inquirer.prompt(
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json'
     },
-    url : `http://api.skyscanner.net/apiservices/browsequotes/v1.0/${config.country}/${config.currency}/${config.locale}/${answers.origin}/${answers.destination}/${answers.outbound}/${answers.inbound}`,
+    url : `http://api.skyscanner.net/apiservices/browsequotes/v1.0/${defaults.country}/${answers.currency}/${defaults.locale}/${answers.origin}/${answers.destination}/${answers.outbound}/${answers.inbound}`,
     qs: {
       apikey: process.env.SKYSCANNER
     }
   }, (err, response, body) => {
     var response = JSON.parse(body);
+    var quoteCount = response.Quotes.length;
     var running = 0;
-    for(var i = 0; i < response.Quotes.length; i++) {
+    for(var i = 0; i < quoteCount; i++) {
       running = running + response.Quotes[i].MinPrice;
     }
-    var averageCost = Math.round(running / response.Quotes.length);
-    console.log(`Your flight from ${response.Places[1].Name} to ${response.Places[0].Name} will cost on average £${averageCost}`);
+    var averageCost = Math.round(running / quoteCount);
+    console.log(`Your flight from ${response.Places[1].Name} to ${response.Places[0].Name} will cost on average ${averageCost}${answers.currency}`);
   });
 });
