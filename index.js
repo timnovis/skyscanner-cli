@@ -1,27 +1,61 @@
+#! /usr/bin/env node
+
+console.log('Search for flight prices from your terminal!');
+
 require('dotenv').config();
 var request = require('request'),
+inquirer = require('inquirer'),
 config = {
   country: "UK",
   currency: "GBP",
   locale: "en-GB"
-},
-search = {
-  origin: "LGW",
-  destination: "KTM",
-  outbound: "2017-01-03",
-  inbound: "2017-01-28"
 };
 
-request({
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Accept': 'application/json'
-  },
-  url : `http://api.skyscanner.net/apiservices/browsequotes/v1.0/${config.country}/${config.currency}/${config.locale}/${search.origin}/${search.destination}/${search.outbound}`,
-  qs: {
-    apikey: process.env.SKYSCANNER
-  }
-}, function(err,httpResponse,body) {
-  var response = JSON.parse(body);
-  console.log(`This will cost you around £${response.Quotes[0].MinPrice}`);
+inquirer.prompt(
+  [
+    {
+      type: 'input',
+      name: 'origin',
+      message: 'Where are you flying from?',
+      default: 'LGW'
+    },
+    {
+      type: 'input',
+      name: 'destination',
+      message: 'Where are you flying to?',
+      default: 'KTM'
+    },
+    {
+      type: 'input',
+      name: 'outbound',
+      message: 'What date are you leaving?',
+      default: 'anytime'
+    },
+    {
+      type: 'input',
+      name: 'inbound',
+      message: 'What date are you returning?',
+      default: 'anytime'
+    }
+  ]
+).then(function(answers) {
+  // console.log(answers);
+  request({
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    },
+    url : `http://api.skyscanner.net/apiservices/browsequotes/v1.0/${config.country}/${config.currency}/${config.locale}/${answers.origin}/${answers.destination}/${answers.outbound}/${answers.inbound}`,
+    qs: {
+      apikey: process.env.SKYSCANNER
+    }
+  }, function(err, response, body) {
+    var response = JSON.parse(body);
+    var running = 0;
+    for(var i = 0; i < response.Quotes.length; i++) {
+      running = running + response.Quotes[i].MinPrice;
+    }
+    var averageCost = Math.round(running / response.Quotes.length);
+    console.log(`Your flight from ${response.Places[1].Name} to ${response.Places[0].Name} will cost on average £${averageCost}`);
+  });
 });

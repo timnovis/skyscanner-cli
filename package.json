@@ -1,7 +1,7 @@
 {
   "name": "skyscanner-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "Fetches price estimates from Skyscanner",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,12 +12,16 @@
   },
   "author": "Tim Novis",
   "license": "ISC",
+  "bin": {
+    "skyscanner": "./index.js"
+  },
   "bugs": {
     "url": "https://github.com/timnovis/skyscanner-cli/issues"
   },
   "homepage": "https://github.com/timnovis/skyscanner-cli#readme",
   "dependencies": {
     "dotenv": "^2.0.0",
+    "inquirer": "^2.0.0",
     "request": "^2.79.0"
   }
 }
