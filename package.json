@@ -1,0 +1,23 @@
+{
+  "name": "skyscanner-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timnovis/skyscanner-cli.git"
+  },
+  "author": "Tim Novis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timnovis/skyscanner-cli/issues"
+  },
+  "homepage": "https://github.com/timnovis/skyscanner-cli#readme",
+  "dependencies": {
+    "dotenv": "^2.0.0",
+    "request": "^2.79.0"
+  }
+}
