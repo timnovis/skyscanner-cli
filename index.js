@@ -38,7 +38,7 @@ inquirer.prompt(
       default: 'anytime'
     }
   ]
-).then(function(answers) {
+).then((answers) => {
   // console.log(answers);
   request({
     headers: {
@@ -49,7 +49,7 @@ inquirer.prompt(
     qs: {
       apikey: process.env.SKYSCANNER
     }
-  }, function(err, response, body) {
+  }, (err, response, body) => {
     var response = JSON.parse(body);
     var running = 0;
     for(var i = 0; i < response.Quotes.length; i++) {
